@@ -163,6 +163,8 @@ class _TestResult(unittest.TestResult):
         self.verbosity = verbosity
         self.result = []
         self.add_traceback = add_traceback
+        # track current test
+        self.current_test = None
 
     def startTest(self, test):
         """
@@ -175,6 +177,8 @@ class _TestResult(unittest.TestResult):
 
         """
         super().startTest(test)
+        #current test
+        self.current_test = test
         # just one buffer for both stdout and stderr
         stdout_redirector.fp = self.outputBuffer
         stderr_redirector.fp = self.outputBuffer
@@ -212,7 +216,13 @@ class _TestResult(unittest.TestResult):
         Returns:
 
         """
-        self.complete_output()
+        #orig:
+        #self.complete_output()
+        #new capture output:
+        output = self.complete_output()
+        if self.current_test:
+            self.result[-1] = (self.result[-1][0], self.result[-1][1], self.result[-1][2] + output, self.result[-1][3])
+        self.current_test = None
 
     def addSuccess(self, test):
         """
@@ -530,6 +540,15 @@ class HTMLTestRunner:
         # o and e should be byte string because they are collected from stdout and stderr?
         log = to_string(o)
         error = to_string(e)
+
+        #get screenshot
+        screenshot = getattr(t, 'screenshot_path', None)
+        # get exception 
+        exception = getattr(t, 'exception_path', None)
+        exception_text =""
+        if exception and os.path.exists(exception):
+            with open(exception,'r') as f_exc:
+                exception_text = f_exc.read()
         testcase = {
             'tid': tid,
             'class': (n == 0 and 'hiddenRow' or 'none'),
@@ -538,5 +557,7 @@ class HTMLTestRunner:
             'log': re.sub('\x00', '', log),
             'error': error,
             'status': STATUS[n],
+            'exception_text': exception_text,
+            'screenshot': screenshot
         }
         fun_testcases.append(testcase)
