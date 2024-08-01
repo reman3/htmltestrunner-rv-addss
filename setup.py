@@ -3,7 +3,7 @@ import setuptools
 with open('README.md', 'r') as fh:
     long_description = fh.read()
 setuptools.setup(
-    name="HTMLTestRunner-rv",
+    name="HTMLTestRunner-rv-addss",
     author="Ravikirana B",
     version="1.1.2",
     author_email="ravikiranb36@gmail.com",
