@@ -7,10 +7,161 @@
     <link rel="stylesheet" href="stylesheet.css">
     <script src="script.js"></script>
     <style>
-        {{ style }}
+        body        {
+        font-family: verdana, arial, helvetica, sans-serif;
+        font-size: 80%;
+        background-color:#ffecb3;
+        }
+        table       { font-size: 100%; }
+        pre         {margin:5px;}
+        /* -- heading ---------------------------------------------------------------------- */
+        h1 {
+            font-size: 16pt;
+        }
+        .heading {
+            margin-top: 0ex;
+            margin-bottom: 1ex;
+            border-style:ridge;
+            color:white;
+            background-color:#999900;
+            font-weight:bold;
+        }
+        .heading .attribute {
+            margin-top: 1ex;
+            margin-bottom: 1ex;
+            margin-left:1ex;
+        }
+        .heading .description {
+            margin-top: 4ex;
+            margin-bottom: 6ex;
+        }
+        /* -- css div popup ------------------------------------------------------------------------ */
+        a{
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        }
+        a:hover {
+            text-decoration:underline;
+        }
+        button{
+        margin:3px;
+        }
+        .popup_window {
+            display: none;
+            background-color: white;
+            font-family: "Lucida Console", "Courier New", Courier, monospace;
+            text-align: left;
+            font-size: 8pt;
+            padding:10px;
+            margin:20px;
+        }
+        /* -- report ------------------------------------------------------------------------ */
+        #show_detail_line {
+            margin-top: 3ex;
+            margin-bottom: 1ex;
+        }
+        #result_table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #777;
+        }
+        #header_row {
+            font-weight: bold;
+            color: white;
+            background-color: #777;
+        }
+        #result_table td {
+            border: 1px solid #777;
+            padding: 2px;
+            word-wrap: break-word;
+            max-width:150px;
+        }
+        #total_row  { font-weight: bold; color: white; background-color: #777; }
+        .passClass  { background-color: #53c653; }
+        .failClass  { background-color: #ffb380;  }
+        .errorClass { background-color: #ff8080; }
+        .passCase   { background-color: #53c653; }
+        .failCase   { background-color: #ffb380;  }
+        .errorCase  { background-color: #ff8080;  }
+        .hiddenRow  { display: none; }
+        .testcase   { margin-left: 2em;}
+        /* -- ending ---------------------------------------------------------------------- */
+        #ending {
+        }
     </style>
     <script>
-        {{ script }}
+        output_list = Array();
+        /* level - 0:Summary; 1:Failed; 2:All */
+        function showCase(level) {
+            trs = document.getElementsByTagName("tr");
+            for (var i = 0; i < trs.length; i++) {
+                tr = trs[i];
+                id = tr.id;
+                if (level == 0) {
+                    if (id.substr(0,2) == 'ft' || id.substr(0,2) == 'pt'){
+                        tr.className = 'hiddenRow';
+                    }
+                }else if (level == 1) {
+                    if (id.substr(0,2) == 'ft'){
+                        tr.className = '';
+                    }else if (id.substr(0,2) == 'pt'){
+                        tr.className = 'hiddenRow';
+                    }
+                }else if (level == 2) {
+                    if (id.substr(0,2) == 'pt'){
+                        tr.className = '';
+                    }else if (id.substr(0,2) == 'ft'){
+                        tr.className = 'hiddenRow';
+                    }
+                }else {
+                    if ((id.substr(0,2) == 'ft') || (id.substr(0,2) == 'pt')){
+                        tr.className = '';
+                    }
+                }
+            }
+        }
+        function showClassDetail(cid, count) {
+            var id_list = Array(count);
+            var toHide = 1;
+            for (var i = 0; i < count; i++) {
+                tid0 = 't' + cid.substr(1) + '.' + (i+1);
+                tid = 'f' + tid0;
+                tr = document.getElementById(tid);
+                if (!tr) {
+                    tid = 'p' + tid0;
+                    tr = document.getElementById(tid);
+                }
+                id_list[i] = tid;
+                if (tr){
+                    if (tr.className) {
+                    toHide = 0;
+                }
+                }
+            }
+            for (var i = 0; i < count; i++) {
+                tid = id_list[i];
+                if (toHide) {
+                    document.getElementById('div_'+tid).style.display = 'none'
+                    document.getElementById(tid).className = 'hiddenRow';
+                }
+                else {
+                    document.getElementById(tid).className = '';
+                }
+            }
+        }
+        function showTestDetail(div_id){
+            var details_div = document.getElementById(div_id)
+            var displayState = details_div.style.display
+            // alert(displayState)
+            if (displayState != 'block' ) {
+                displayState = 'block'
+                details_div.style.display = 'block'
+            }
+            else {
+                details_div.style.display = 'none'
+            }
+        }
     </script>
 </head>
 <body>
