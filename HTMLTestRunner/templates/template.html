@@ -232,6 +232,12 @@
                             </div>
                             <pre>{{ testcase['log'] }}</pre>
                             <pre style="color: red;">{{ testcase['error'] }}</pre>
+                            {% if testcase['screenshot'] %}
+                            <img src="{{ testcase['screenshot'] }}" alt="Screenshot" style="max-width: 100%; height: auto;">
+                            {% endif %}
+                            {% if testcase['exception_text'] %} 
+                            <pre style="color: blue;">{{ testcase['exception_text'] }}</pre> 
+                            {% endif %} 
                         </div>
                         <!--css div popup end-->
                     </div>
