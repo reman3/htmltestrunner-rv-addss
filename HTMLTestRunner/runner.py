@@ -239,11 +239,11 @@ class _TestResult(unittest.TestResult):
         output = self.complete_output()
         self.result.append((0, test, output, ''))
         if self.verbosity > 1:
-            sys.stdout.write('ok ')
+            sys.stdout.write('Pass ')
             sys.stdout.write(str(test))
             sys.stdout.write('\n')
         else:
-            sys.stdout.write('P')
+            sys.stdout.write('P ')
 
     def addError(self, test, err):
         """
@@ -264,11 +264,11 @@ class _TestResult(unittest.TestResult):
         output = self.complete_output()
         self.result.append((2, test, output, _exc_str))
         if self.verbosity > 1:
-            sys.stderr.write('E')
+            sys.stderr.write('Err ')
             sys.stderr.write(str(test))
             sys.stderr.write('\n')
         else:
-            sys.stderr.write('E')
+            sys.stderr.write('E ')
 
     def addFailure(self, test, err):
         """
@@ -290,11 +290,11 @@ class _TestResult(unittest.TestResult):
         output = self.complete_output()
         self.result.append((1, test, output, _exc_str))
         if self.verbosity > 1:
-            sys.stderr.write('F  ')
+            sys.stderr.write('Fail ')
             sys.stderr.write(str(test))
             sys.stderr.write('\n')
         else:
-            sys.stderr.write('F')
+            sys.stderr.write('F ')
 
     def addSubTest(self, test: unittest.case.TestCase, subtest: unittest.case.TestCase, err) -> None:
         """
