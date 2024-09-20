@@ -432,7 +432,6 @@ class HTMLTestRunner:
             ('Description', self.description),
             ('Tested By', self.tested_by),
             ('Application Build No.', self.build)  # Added application build to report
-    ]
         ]
 
     def generate_report(self, result):
