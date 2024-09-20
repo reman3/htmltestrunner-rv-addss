@@ -318,7 +318,7 @@ class _TestResult(unittest.TestResult):
 
 class HTMLTestRunner:
     def __init__(self, log=None, output=None, verbosity=1, title=None, description=None, style="", script="",
-                 report_name='report', open_in_browser=False, tested_by="Unknown", add_traceback=True):
+                 report_name='report', open_in_browser=False, tested_by="Unknown", add_traceback=True, build=None):
         """
         HTMLTestRunner
         Args:
@@ -333,6 +333,7 @@ class HTMLTestRunner:
             report_name (str): Starting name of Test report and log file
             open_in_browser (bool): If ``True`` it opens report in browser automatically
             add_traceback (bool):Adds error trace back to report if True
+            build = application build
 
         Returns:
             Runner object
@@ -343,6 +344,8 @@ class HTMLTestRunner:
         self.style = style
         self.script = script
         self.tested_by = tested_by
+        #add application build variable             
+        self.build = build
         if output is None:
             output = 'reports'
         self.open_in_browser = open_in_browser
@@ -427,7 +430,9 @@ class HTMLTestRunner:
             ('Duration', duration),
             ('Status', status),
             ('Description', self.description),
-            ('Tested By', self.tested_by)
+            ('Tested By', self.tested_by),
+            ('Application Build No.', self.build)  # Added application build to report
+    ]
         ]
 
     def generate_report(self, result):
